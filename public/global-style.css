@@ -1,0 +1,55 @@
+/* === GLOBAL LAYOUT STYLES === */
+
+/* Entire page takes full height */
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Sidebar with dark background */
+.sidebar {
+  width: 20rem;
+  min-height: 100vh;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  padding: 1.5rem 1rem;
+}
+
+/* Sidebar brand title */
+.sidebar h4 {
+  font-size: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+
+/* Sidebar links default style */
+.sidebar .nav-link {
+  padding: 10px 15px;
+  border-radius: 8px;
+  color: #ffffff;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+/* Hover effect for sidebar links */
+.sidebar .nav-link:hover {
+  background-color: rgba(255,255,255,0.1);
+}
+
+/* Active link appearance */
+.sidebar .nav-link.active-link {
+  background-color: #ffffff;   /* White background */
+  color: #000000 !important;   /* Black text */
+  font-weight: 600;
+  box-shadow: 0 0 10px rgba(0,0,0,0.15);
+}
+
+/* Main view area layout */
+main {
+  background-color: #f5f5f5;
+  min-height: 100vh;
+}
+
+/* Section padding inside view */
+main .container {
+  padding: 2rem;
+}
