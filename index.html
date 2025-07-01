@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="employeeManagementMainApplicationModule">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Employee Management Application</title>
+
+  <!-- ========== BOOTSTRAP STYLING ========== -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <!-- ========== GLOBAL STYLESHEET ========== -->
+  <link rel="stylesheet" href="global-style.css" />
+
+  <!-- ========== ANGULARJS + UI-ROUTER CORE ========== -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.29/angular-ui-router.min.js"></script>
+
+  <!-- ========== MAIN ROUTING CONFIGURATION ========== -->
+  <script src="appRoutingConfiguration.js"></script>
+
+  <!-- ========== EMPLOYEE DETAILS FORM (Form1) ========== -->
+  <script src="EmployeeDetailsForm/employeeDetailsFormAppModule.js"></script>
+  <script src="EmployeeDetailsForm/models/defaultEmployeeFormModel.js"></script>
+  <script src="EmployeeDetailsForm/controllers/employeeDetailsFormController.js"></script>
+  <script src="EmployeeDetailsForm/services/employeePopupDataFormatterService.js"></script>
+  <link rel="stylesheet" href="EmployeeDetailsForm/css/employeeDetailsFormStyles.css" />
+
+  <!-- ========== FORM 2 (Dummy Placeholder) ========== -->
+  <script src="Form2/form2AppModule.js"></script>
+  <script src="Form2/controllers/form2DisplayController.js"></script>
+  <link rel="stylesheet" href="Form2/css/form2Styles.css" />
+
+  <!-- ========== VIEW EMPLOYEE DETAILS FORM (Form3) ========== -->
+  <script src="viewEmployeeDetailsForm/viewEmployeeDetailsFormAppModule.js"></script>
+  <script src="viewEmployeeDetailsForm/controllers/viewEmployeeDetailsGridController.js"></script>
+  <script src="viewEmployeeDetailsForm/services/viewEmployeeDataFetchService.js"></script>
+  <link rel="stylesheet" href="viewEmployeeDetailsForm/css/viewEmployeeDetails.css" />
+
+  <!-- ========== AG GRID - STYLES + SCRIPT (FOR ANGULARJS ONLY!) ========== -->
+  <link href="https://cdn.jsdelivr.net/npm/ag-grid-community/styles/ag-grid.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/ag-grid-community/styles/ag-theme-alpine.css" rel="stylesheet" />
+  <!-- AG Grid core -->
+  <script src="https://cdn.jsdelivr.net/npm/ag-grid-community/dist/ag-grid-community.min.js"></script>
+</head>
+
+<body>
+  <div class="d-flex" style="min-height: 100vh;">
+
+    <!-- ========== SIDEBAR ========= -->
+    <nav class="sidebar bg-dark text-white p-4">
+      <h4 class="text-white mb-4">Employee Portal</h4>
+      <ul class="nav flex-column">
+        <li class="nav-item mb-2">
+          <a class="nav-link w-100 text-truncate" 
+             ui-sref="employeeDetailsFormState" 
+             ui-sref-active="active-link">
+             Employee Details Form
+          </a>
+        </li>
+
+        <li class="nav-item mb-2">
+          <a class="nav-link w-100 text-truncate" 
+             ui-sref="form2DisplayState" 
+             ui-sref-active="active-link">
+             Form 2
+          </a>
+        </li>
+
+        <li class="nav-item mb-2">
+          <a class="nav-link w-100 text-truncate" 
+             ui-sref="viewEmployeeDetailsState" 
+             ui-sref-active="active-link">
+             View Employee Details
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- ========== MAIN CONTENT (UI-VIEW) ========= -->
+    <div class="container-fluid px-3 px-md-4">
+      <main class="bg-white px-4 pt-1 pb-2 rounded-3 shadow mx-auto" style="max-width: 50rem;">
+        <div ui-view></div>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

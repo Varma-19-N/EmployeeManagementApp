@@ -1,0 +1,60 @@
+/* === View Employee Details Grid Page Styling === */
+
+/* Container adjustments for responsiveness */
+.container-fluid {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+/* Heading style */
+h4.fw-semibold {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+/* Error message alert box */
+.alert-danger {
+  font-size: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+/* AG Grid container */
+.ag-theme-alpine {
+  height: 600px;
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
+  background-color: #ffffff;
+  overflow: hidden;
+}
+
+/* AG Grid column headers */
+.ag-header-cell-label {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #000000;
+}
+
+/* AG Grid rows */
+.ag-cell {
+  font-size: 0.9rem;
+  color: #333333;
+}
+
+/* Responsive improvements for smaller devices */
+@media (max-width: 768px) {
+  .ag-theme-alpine {
+    height: 500px;
+  }
+
+  h4.fw-semibold {
+    font-size: 1.25rem;
+  }
+
+  .alert-danger {
+    font-size: 0.95rem;
+  }
+}

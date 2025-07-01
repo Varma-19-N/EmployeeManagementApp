@@ -1,0 +1,13 @@
+/* === FORM 2 STYLES === */
+
+/* Matches the layout width of Form 1 */
+.form-container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Ensure vertical centering works properly */
+.form-container h2 {
+  font-weight: 500;
+  font-size: 1.75rem;
+}
