@@ -1,10 +1,9 @@
-
 // This controller initializes AG Grid inside an AngularJS application
 // with mock employee data, used when backend API is not available.
 
 angular
   .module("viewEmployeeDetailsFormModule")
-  .controller("ViewEmployeeDetailsGridController", function ($scope) {
+  .controller("ViewEmployeeDetailsGridController", function ($scope, $timeout) {
 
     // Optional error message placeholder
     $scope.errorMessageFromServer = "";
@@ -42,36 +41,145 @@ angular
           country: "India",
           postalCode: "560002"
         }
+      },
+      {
+        personalDetails: {
+          firstName: "Rajesh",
+          lastName: "Kumar",
+          email: "rajesh.kumar@example.com",
+          dob: "1992-12-25",
+          gender: "Male"
+        },
+        address: {
+          street: "789 Oak Street",
+          city: "Chennai",
+          state: "Tamil Nadu",
+          country: "India",
+          postalCode: "600003"
+        }
+      },
+      {
+        personalDetails: {
+          firstName: "Priya",
+          lastName: "Sharma",
+          email: "priya.sharma@example.com",
+          dob: "1990-05-18",
+          gender: "Female"
+        },
+        address: {
+          street: "321 Pine Road",
+          city: "Mumbai",
+          state: "Maharashtra",
+          country: "India",
+          postalCode: "400004"
+        }
       }
     ];
 
     // AG Grid configuration
-    $scope.gridConfigurationOptions = {
+    const gridOptions = {
       columnDefs: [
-        { headerName: "First Name", field: "personalDetails.firstName", sortable: true, filter: true },
-        { headerName: "Last Name", field: "personalDetails.lastName", sortable: true, filter: true },
-        { headerName: "Email", field: "personalDetails.email", sortable: true, filter: true },
-        { headerName: "Date of Birth", field: "personalDetails.dob", sortable: true, filter: true },
-        { headerName: "Gender", field: "personalDetails.gender", sortable: true, filter: true },
-        { headerName: "Street", field: "address.street", sortable: true, filter: true },
-        { headerName: "City", field: "address.city", sortable: true, filter: true },
-        { headerName: "State", field: "address.state", sortable: true, filter: true },
-        { headerName: "Country", field: "address.country", sortable: true, filter: true },
-        { headerName: "Postal Code", field: "address.postalCode", sortable: true, filter: true }
+        { 
+          headerName: "First Name", 
+          field: "personalDetails.firstName", 
+          sortable: true, 
+          filter: true,
+          width: 120
+        },
+        { 
+          headerName: "Last Name", 
+          field: "personalDetails.lastName", 
+          sortable: true, 
+          filter: true,
+          width: 120
+        },
+        { 
+          headerName: "Email", 
+          field: "personalDetails.email", 
+          sortable: true, 
+          filter: true,
+          width: 200
+        },
+        { 
+          headerName: "Date of Birth", 
+          field: "personalDetails.dob", 
+          sortable: true, 
+          filter: true,
+          width: 130
+        },
+        { 
+          headerName: "Gender", 
+          field: "personalDetails.gender", 
+          sortable: true, 
+          filter: true,
+          width: 100
+        },
+        { 
+          headerName: "Street", 
+          field: "address.street", 
+          sortable: true, 
+          filter: true,
+          width: 150
+        },
+        { 
+          headerName: "City", 
+          field: "address.city", 
+          sortable: true, 
+          filter: true,
+          width: 120
+        },
+        { 
+          headerName: "State", 
+          field: "address.state", 
+          sortable: true, 
+          filter: true,
+          width: 120
+        },
+        { 
+          headerName: "Country", 
+          field: "address.country", 
+          sortable: true, 
+          filter: true,
+          width: 100
+        },
+        { 
+          headerName: "Postal Code", 
+          field: "address.postalCode", 
+          sortable: true, 
+          filter: true,
+          width: 120
+        }
       ],
       defaultColDef: {
         resizable: true,
-        flex: 1
+        sortable: true,
+        filter: true
       },
-      rowData: [], // We will populate this on grid ready
+      rowData: mockEmployeeList,
       pagination: true,
-      paginationPageSize: 10
+      paginationPageSize: 10,
+      domLayout: 'normal',
+      suppressHorizontalScroll: false,
+      onGridReady: function(params) {
+        // Auto-size columns to fit content
+        params.api.sizeColumnsToFit();
+        
+        // Store grid API for future use
+        $scope.gridApi = params.api;
+        $scope.gridColumnApi = params.columnApi;
+      }
     };
 
-    // AG Grid lifecycle hook
-    $scope.onGridReady = function (params) {
-      // Store API reference for future use
-      $scope.gridConfigurationOptions.api = params.api;
-      $scope.gridConfigurationOptions.api.setRowData(mockEmployeeList);
-    };
+    // Initialize AG Grid after DOM is ready
+    $timeout(function() {
+      const gridDiv = document.querySelector('#employeeDataGrid');
+      if (gridDiv && window.agGrid) {
+        new agGrid.Grid(gridDiv, gridOptions);
+      } else {
+        $scope.errorMessageFromServer = "AG Grid failed to initialize. Please check if AG Grid library is loaded properly.";
+      }
+    }, 100);
+
+    // Expose grid options to scope for potential future use
+    $scope.gridOptions = gridOptions;
   });

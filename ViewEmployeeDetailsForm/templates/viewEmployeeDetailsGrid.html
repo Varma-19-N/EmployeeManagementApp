@@ -5,11 +5,9 @@
     {{ errorMessageFromServer }}
   </div>
 
-  <!-- AG Grid DOM container -->
-  <ag-grid-angular
-    class="ag-theme-alpine bg-white p-3 rounded-3 shadow"
-    style="height: 600px; width: 100%;"
-    grid-options="gridConfigurationOptions"
-    on-grid-ready="onGridReady($event)">
-  </ag-grid-angular>
+  <!-- AG Grid DOM container for AngularJS -->
+  <div id="employeeDataGrid" 
+       class="ag-theme-alpine"
+       style="height: 600px; width: 100%;">
+  </div>
 </div>
