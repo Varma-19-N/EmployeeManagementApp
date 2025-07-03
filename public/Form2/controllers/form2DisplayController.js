@@ -1,125 +1,141 @@
 /**
- * Controller for the Text Analytics Dashboard.
- * Manages real-time text analysis and display of analytics results.
+ * Controller for the Greeting Feature.
+ * Manages personalized greetings and interactive greeting elements.
  */
 angular.module('form2Module')
-  .controller('form2DisplayController', function ($scope, $timeout, textAnalyticsService, textAnalyticsModel) {
+  .controller('form2DisplayController', function ($scope, $interval, greetingService, greetingModel) {
 
-    // Initialize the text analytics model
-    $scope.textData = angular.copy(textAnalyticsModel);
+    // Initialize the greeting model
+    $scope.greetingData = angular.copy(greetingModel);
     
-    // UI state management
-    $scope.isAnalyzing = false;
-    $scope.showDetailedView = false;
-    $scope.analyticsHistory = [];
-
-    // Debounce timer for real-time analysis
-    let analysisTimer;
+    // Current greeting display
+    $scope.currentGreeting = '';
+    $scope.currentQuote = '';
+    $scope.currentFunFact = '';
+    $scope.currentDateTime = '';
+    
+    // UI state
+    $scope.showQuote = false;
+    $scope.showFunFact = false;
+    $scope.includeTimeGreeting = true;
+    
+    // Available greeting types
+    $scope.greetingTypes = greetingService.getGreetingTypes();
 
     /**
-     * Performs text analysis with debouncing for performance
+     * Generates and displays a new greeting
      */
-    $scope.analyzeText = function() {
-      if (analysisTimer) {
-        $timeout.cancel(analysisTimer);
-      }
-
-      $scope.isAnalyzing = true;
-
-      analysisTimer = $timeout(function() {
-        $scope.textData.analytics = textAnalyticsService.analyzeText($scope.textData.inputText);
-        $scope.textData.lastAnalyzedAt = new Date();
-        $scope.isAnalyzing = false;
-        
-        // Add to history if text is substantial
-        if ($scope.textData.analytics.wordCount > 10) {
-          $scope.addToHistory();
-        }
-      }, 500); // 500ms debounce
+    $scope.generateGreeting = function() {
+      $scope.currentGreeting = greetingService.generateGreeting(
+        $scope.greetingData.userName,
+        $scope.greetingData.selectedGreetingType,
+        $scope.includeTimeGreeting
+      );
+      
+      $scope.greetingData.showPersonalizedGreeting = true;
+      
+      // Add to history
+      $scope.addToHistory($scope.currentGreeting);
     };
 
     /**
-     * Adds current analysis to history
+     * Gets a new motivational quote
      */
-    $scope.addToHistory = function() {
+    $scope.getNewQuote = function() {
+      $scope.currentQuote = greetingService.getMotivationalQuote();
+      $scope.showQuote = true;
+    };
+
+    /**
+     * Gets a new fun fact
+     */
+    $scope.getNewFunFact = function() {
+      $scope.currentFunFact = greetingService.getFunFact();
+      $scope.showFunFact = true;
+    };
+
+    /**
+     * Updates the current date and time
+     */
+    $scope.updateDateTime = function() {
+      $scope.currentDateTime = greetingService.getCurrentDateTime();
+    };
+
+    /**
+     * Adds greeting to history
+     */
+    $scope.addToHistory = function(greeting) {
       const historyEntry = {
+        greeting: greeting,
         timestamp: new Date(),
-        wordCount: $scope.textData.analytics.wordCount,
-        sentiment: $scope.textData.analytics.sentiment.label,
-        complexity: $scope.textData.analytics.complexity.level,
-        preview: $scope.textData.inputText.substring(0, 50) + '...'
+        greetingType: $scope.greetingData.selectedGreetingType,
+        userName: $scope.greetingData.userName
       };
 
-      $scope.analyticsHistory.unshift(historyEntry);
+      $scope.greetingData.greetingHistory.unshift(historyEntry);
       
       // Keep only last 5 entries
-      if ($scope.analyticsHistory.length > 5) {
-        $scope.analyticsHistory = $scope.analyticsHistory.slice(0, 5);
+      if ($scope.greetingData.greetingHistory.length > 5) {
+        $scope.greetingData.greetingHistory = $scope.greetingData.greetingHistory.slice(0, 5);
       }
     };
 
     /**
-     * Clears all data and resets the form
+     * Clears all data and resets
      */
     $scope.clearAll = function() {
-      $scope.textData = angular.copy(textAnalyticsModel);
-      $scope.analyticsHistory = [];
-      $scope.showDetailedView = false;
-      
-      if (analysisTimer) {
-        $timeout.cancel(analysisTimer);
-      }
+      $scope.greetingData = angular.copy(greetingModel);
+      $scope.currentGreeting = '';
+      $scope.currentQuote = '';
+      $scope.currentFunFact = '';
+      $scope.showQuote = false;
+      $scope.showFunFact = false;
     };
 
     /**
-     * Toggles between simple and detailed analytics view
-     */
-    $scope.toggleDetailedView = function() {
-      $scope.showDetailedView = !$scope.showDetailedView;
-    };
-
-    /**
-     * Gets the appropriate CSS class for sentiment display
-     */
-    $scope.getSentimentClass = function(sentiment) {
-      switch(sentiment.label.toLowerCase()) {
-        case 'positive': return 'text-success';
-        case 'negative': return 'text-danger';
-        default: return 'text-secondary';
-      }
-    };
-
-    /**
-     * Gets the appropriate CSS class for complexity display
-     */
-    $scope.getComplexityClass = function(complexity) {
-      switch(complexity.level.toLowerCase()) {
-        case 'simple': return 'text-success';
-        case 'moderate': return 'text-warning';
-        case 'complex': return 'text-danger';
-        default: return 'text-secondary';
-      }
-    };
-
-    /**
-     * Formats the timestamp for display
+     * Formats timestamp for display
      */
     $scope.formatTime = function(timestamp) {
       return timestamp ? timestamp.toLocaleTimeString() : '';
     };
 
     /**
-     * Sample text for demonstration
+     * Gets greeting type display name
      */
-    $scope.loadSampleText = function() {
-      $scope.textData.inputText = "Welcome to our innovative text analytics dashboard! This amazing tool provides comprehensive analysis of your text content. It calculates various metrics including word count, reading time, sentiment analysis, and complexity assessment. The real-time analysis feature makes it incredibly user-friendly and efficient. You can use this tool to improve your writing, analyze customer feedback, or simply explore the characteristics of any text content. The dashboard presents beautiful visualizations and detailed insights that help you understand your text better.";
-      $scope.analyzeText();
+    $scope.getGreetingTypeDisplayName = function(type) {
+      return type.charAt(0).toUpperCase() + type.slice(1);
     };
 
-    // Watch for text changes to trigger analysis
-    $scope.$watch('textData.inputText', function(newValue, oldValue) {
-      if (newValue !== oldValue) {
-        $scope.analyzeText();
+    /**
+     * Loads a sample greeting
+     */
+    $scope.loadSample = function() {
+      $scope.greetingData.userName = 'Alex';
+      $scope.greetingData.selectedGreetingType = 'friendly';
+      $scope.generateGreeting();
+      $scope.getNewQuote();
+    };
+
+    // Initialize with current date/time
+    $scope.updateDateTime();
+    
+    // Update date/time every minute
+    const timeInterval = $interval($scope.updateDateTime, 60000);
+    
+    // Generate initial greeting
+    $scope.currentGreeting = greetingService.getGenericGreeting();
+
+    // Cleanup interval on scope destroy
+    $scope.$on('$destroy', function() {
+      if (timeInterval) {
+        $interval.cancel(timeInterval);
+      }
+    });
+
+    // Watch for name changes to auto-generate greeting
+    $scope.$watch('greetingData.userName', function(newValue, oldValue) {
+      if (newValue && newValue !== oldValue && newValue.trim() !== '') {
+        $scope.generateGreeting();
       }
     });
   });

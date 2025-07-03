@@ -1,3 +1,146 @@
-<div class="mt-4 text-center">
-  <h2>This is Form2</h2>
+<div class="greeting-container">
+  
+  <!-- Header Section -->
+  <div class="greeting-header">
+    <h2>🌟 Personal Greeting Center</h2>
+    <p>Create personalized greetings and brighten your day!</p>
+    <div class="datetime-display">
+      📅 {{ currentDateTime }}
+    </div>
+  </div>
+
+  <!-- Input Section -->
+  <div class="input-section">
+    <h4>✨ Customize Your Greeting</h4>
+    
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="userName">Your Name</label>
+          <input type="text" 
+                 id="userName"
+                 class="form-control" 
+                 ng-model="greetingData.userName"
+                 placeholder="Enter your name..."
+                 maxlength="50">
+        </div>
+      </div>
+      
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="greetingType">Greeting Style</label>
+          <select id="greetingType" 
+                  class="form-select" 
+                  ng-model="greetingData.selectedGreetingType">
+            <option ng-repeat="type in greetingTypes" 
+                    value="{{ type }}">
+              {{ getGreetingTypeDisplayName(type) }}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-check">
+      <input type="checkbox" 
+             id="includeTime" 
+             class="form-check-input" 
+             ng-model="includeTimeGreeting">
+      <label for="includeTime" class="form-check-label">
+        Include time-based greeting (Good morning, etc.)
+      </label>
+    </div>
+  </div>
+
+  <!-- Current Greeting Display -->
+  <div class="greeting-display" ng-show="currentGreeting">
+    <div class="greeting-text">{{ currentGreeting }}</div>
+    <div class="greeting-meta" ng-show="greetingData.userName">
+      Generated for {{ greetingData.userName }} • {{ getGreetingTypeDisplayName(greetingData.selectedGreetingType) }} style
+    </div>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="action-buttons">
+    <button type="button" 
+            class="btn-greeting btn-primary-greeting"
+            ng-click="generateGreeting()">
+      🎯 Generate New Greeting
+    </button>
+    
+    <button type="button" 
+            class="btn-greeting btn-outline-greeting"
+            ng-click="getNewQuote()">
+      💡 Get Inspiration
+    </button>
+    
+    <button type="button" 
+            class="btn-greeting btn-outline-greeting"
+            ng-click="getNewFunFact()">
+      🎲 Fun Fact
+    </button>
+    
+    <button type="button" 
+            class="btn-greeting btn-secondary-greeting"
+            ng-click="loadSample()">
+      📝 Try Sample
+    </button>
+    
+    <button type="button" 
+            class="btn-greeting btn-secondary-greeting"
+            ng-click="clearAll()">
+      🗑️ Clear All
+    </button>
+  </div>
+
+  <!-- Motivational Quote Section -->
+  <div class="quote-section" ng-show="showQuote && currentQuote">
+    <div class="section-title">
+      💫 Daily Inspiration
+    </div>
+    <div class="quote-text">"{{ currentQuote }}"</div>
+    <button type="button" 
+            class="btn-greeting btn-outline-greeting"
+            ng-click="getNewQuote()">
+      🔄 New Quote
+    </button>
+  </div>
+
+  <!-- Fun Fact Section -->
+  <div class="funfact-section" ng-show="showFunFact && currentFunFact">
+    <div class="section-title">
+      🤔 Did You Know?
+    </div>
+    <div class="funfact-text">{{ currentFunFact }}</div>
+    <button type="button" 
+            class="btn-greeting btn-outline-greeting"
+            ng-click="getNewFunFact()">
+      🎯 Another Fact
+    </button>
+  </div>
+
+  <!-- Greeting History -->
+  <div class="history-section" ng-show="greetingData.greetingHistory.length > 0">
+    <h4>📚 Recent Greetings</h4>
+    
+    <div class="history-item" ng-repeat="item in greetingData.greetingHistory">
+      <div class="history-greeting">{{ item.greeting }}</div>
+      <div class="history-meta">
+        <span>
+          <strong>{{ item.userName || 'Anonymous' }}</strong> • 
+          <span class="greeting-type-badge">{{ getGreetingTypeDisplayName(item.greetingType) }}</span>
+        </span>
+        <span>{{ formatTime(item.timestamp) }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty State for History -->
+  <div class="history-section" ng-show="greetingData.greetingHistory.length === 0">
+    <div class="empty-state">
+      <div class="empty-state-icon">📝</div>
+      <p>No greetings generated yet. Create your first personalized greeting above!</p>
+    </div>
+  </div>
+
 </div>
